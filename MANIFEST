@@ -1,0 +1,6 @@
+Changes
+Makefile.PL
+MANIFEST
+README
+t/MARC-File-OAI_MARCXML.t
+lib/MARC/File/OAI_MARCXML.pm

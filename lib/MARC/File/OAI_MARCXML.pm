@@ -7,6 +7,7 @@ MARC::File::OAI_MARCXML - OAI_MARCXML-specific file handling
 =cut
 
 our $VERSION = '1.1';
+our $USE_UTF8 = 1;
 
 use strict;
 use integer;
@@ -199,8 +200,7 @@ sub get_xml_text($)
 
   my $str = $node->getData();
 
-  return $str;
-  #return pack('C*', unpack('U0C*', $str));
+  return $USE_UTF8 ? $str : return pack('C*', unpack('U0C*', $str));
 }
 
 
@@ -212,14 +212,19 @@ Returns a string of characters suitable for writing out to a OAI_MARCXML file
 =cut
 
 sub encode() {
+    my ($doc, $writer);
     my $marc = shift;
     $marc = shift if (ref($marc)||$marc) =~ /^MARC::File/;
 
-	my $doc;
-	my $writer = new XML::Writer(OUTPUT => \$doc, ENCODING => 'utf-8', DATA_INDENT => 2);
-    $writer->xmlDecl("UTF-8");
+    if ($USE_UTF8) {
+	$writer = new XML::Writer(OUTPUT => \$doc, ENCODING => 'utf-8', DATA_INDENT => 2);
+	$writer->xmlDecl("UTF-8");
+    } else {
+	$writer = new XML::Writer(OUTPUT => \$doc);
+    }
+
     $writer->startTag("record");
-	$writer->startTag("oai_marc");
+    $writer->startTag("oai_marc");
     
     $writer->startTag("fixfield", "id" => "LDR");
     $writer->characters($marc->leader());

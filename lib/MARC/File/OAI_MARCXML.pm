@@ -6,7 +6,7 @@ MARC::File::OAI_MARCXML - OAI_MARCXML-specific file handling
 
 =cut
 
-our $VERSION = '1.1';
+our $VERSION = '1.2';
 our $USE_UTF8 = 1;
 
 use strict;
